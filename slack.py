@@ -8,6 +8,7 @@ import random
 import logging
 import csv
 import sys
+from datetime import date
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 #from google.auth.transport.requests import Request
@@ -79,7 +80,14 @@ def main():
             prayers = list(csv.reader(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL, skipinitialspace=True))
             csvfile.close()
 
-        prayer = random.choice(prayers)
+        start = date(2022, 6, 12)
+        today = date.today()
+        which_prayer = (today-start).days % len(prayers)
+        #go through the prayers in sequence
+
+        prayer = prayers[which_prayer]
+
+        #prayer = random.choice(prayers)
        
         slack_message += "Pray this Biblically-inspired prayer over them based on {}\n>{}\n".format(
                 prayer[0],

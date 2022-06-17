@@ -1,5 +1,5 @@
 # slack-prayer
-This script encourages people to pray for specific people using Biblical prayers as a springboard. No effort is made to prevent back-to-back duplication of prayer recipients or of Bible prayers.
+This script encourages people to pray for specific people using Biblical prayers as a springboard. By design no effort is made to prevent back-to-back duplication of prayer recipients - if someone gets selected two or three days in a row we just assume they need extra prayer. The prayers are cycled through in order, each day advancing to a new passage.
 
 # Usage
 1) `pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib`
