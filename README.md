@@ -10,3 +10,6 @@ This script encourages people to pray for specific people using Biblical prayers
 
 # Customization
 It would be easy to modify this script to pull from everyone who is part of a given Slack channel using [conversations.members](https://api.slack.com/methods/conversations.members). The current script doesn't do it because we're praying for formal members of a specific organization.
+
+# A Potential Gotcha
+google-api-python-client 1.5.3 requires oauth2client<4.0.0,>=1.5.0, so if you have an incomotabile version of oauth2client already installed you might receive `AttributeError: 'Credentials' object has no attribute 'authorize'` and it is super annoying to debug. If that happens, either set this up in a virtual environment and run only what you need, or `pip uninstall oauth2client google-api-python-client` and then `pip install google-api-python-client` (it will automatically install the correct dependency)
