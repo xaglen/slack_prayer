@@ -12,19 +12,27 @@ from datetime import date
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 #from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
 #from google_auth_oauthlib.flow import InstalledAppFlow
+from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from google.oauth2 import service_account
 
 import settings
 
-logger = logging.getLogger(__name__)
+logging.basicConfig(
+        filename="pray.log.txt", 
+        format='%(asctime)s %(levelname)-8s %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        encoding="utf-8", 
+        level=logging.INFO)
+logging.info("NEW RUN")
+
+#logger = logging.getLogger(__name__)
 #journald_handler = JournaldLogHandler()
 #journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %message)s'))
 #logger.addHandler(journald_handler)
-logger.setLevel(logging.INFO)
+#logger.setLevel(logging.INFO)
 
 client = WebClient(token=settings.SLACK_TOKEN)
 
@@ -106,22 +114,24 @@ def main():
             channel=settings.SLACK_CHANNEL,
             text=slack_message
             )
+            logging.info("SUCCESSFULLY POSTED")
+            logging.info(slack_message)
         except SlackApiError as e:
         # You will get a SlackApiError if "ok" is False
             message = "Slack error posting prayer focus"
-            logger.info(message)
-            logger.info(e)
-            logger.info(e.response)
+            logging.info(message)
+            logging.info(e)
+            logging.info(e.response)
     #        print(message)
     #        print(e)
         except TypeError as e:
             message = "TypeError posting prayer focus: {}".format(repr(e))
-            logger.info(message)
+            logging.info(message)
     #    print(message+": "+repr(e))
         except:
             e = repr(sys.exc_info()[0])
             message = "Error posting prayer focus: {}".format(e)
-            logger.info(message)
+            logging.info(message)
     #    print(message+": "+e)
 
 
