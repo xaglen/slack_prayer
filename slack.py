@@ -96,10 +96,15 @@ def main():
         prayer = prayers[which_prayer]
 
         #prayer = random.choice(prayers)
+
+        if names[0][0].strip() == names[1][0].strip(): #they have the same first name
+            name_substitution = names[0][0].strip()+"^2"
+        else:
+            name_substitution =  names[0][0].strip()+" and "+names[1][0].strip()
        
         slack_message += "Pray this Biblically-inspired prayer over them based on {}\n>{}\n".format(
                 prayer[0],
-                prayer[1].replace('NAMES', names[0][0].strip()+" and "+names[1][0].strip()))
+                prayer[1].replace('NAMES', name_substitution))
                 # replace NAMES in the CSV passage with the name of the two we're praying for today
 
         slack_message += ("\nIf as you're praying for them the Lord lays something on your heart "
