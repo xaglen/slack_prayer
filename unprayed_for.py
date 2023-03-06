@@ -108,7 +108,7 @@ def main():
 
     conversation_history = fetch_activity(
             client,
-            settings.READ_CHANNEL_ID,
+            'C019QQ22FJ6', #xa-prayer
             first_of_month,
             last_of_month
             )
