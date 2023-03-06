@@ -6,7 +6,8 @@ import pprint
 import logging
 import sys, os
 import re
-import time
+import time, datetime
+from datetime import timedelta
 from collections import Counter
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
@@ -87,10 +88,11 @@ def main():
     #logger.addHandler(journald_handler)
     logger.setLevel(logging.INFO)
 
-    open_season = settings.OPEN_SEASON
-    close_season = settings.CLOSE_SEASON
-    season_title = settings.SEASON_TITLE
-    season_short_title = settings.SEASON_SHORT_TITLE
+    last_month = datetime.today().replace(day=1) - timedelta(days=1)
+    first_of_month = datetime.combine(last_month.replace(day=1), datetime.min.time())
+    # datetime.min.time produces midnight
+    # getting previous month because this runs on midnight in the next month
+    last_of_month = datetime.now() # run from a CRON
 
     client = WebClient(token=settings.SLACK_TOKEN)
 
@@ -107,13 +109,13 @@ def main():
     conversation_history = fetch_activity(
             client,
             settings.READ_CHANNEL_ID,
-            settings.OPEN_SEASON,
-            settings.CLOSE_SEASON
+            first_of_month,
+            last_of_month
             )
     for message in conversation_history:
         ts = int(message['ts'].split('.')[0])
         #timestamp = datetime.fromtimestamp(ts)
-        if open_season.timestamp() <= ts < close_season.timestamp():
+        if first_of_month.timestamp() <= ts < last_of_month.timestamp():
             #TODO check if posted by prayer bot
             pprint.pformat(message)
             if 'text' in message:
