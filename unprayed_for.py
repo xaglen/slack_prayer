@@ -6,8 +6,8 @@ import pprint
 import logging
 import sys, os
 import re
-import time, datetime
-from datetime import timedelta
+import time
+from datetime import timedelta, datetime
 from collections import Counter
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
