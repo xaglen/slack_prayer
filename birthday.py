@@ -81,7 +81,7 @@ def main():
                 slack_message+=" <@"+birthdays[0][2].strip() + ">. Happy birthday! :birthdaypartyparrot: \nPray that this next year is "+birthdays[0][0].strip()+"'s best one yet!"
             elif len(birthdays) == 2:
                 random.shuffle(birthdays)
-                slack_message += " <@{name1}>* and *<@{name2}>.".format(name1=birthdays[0][2].strip(), name2=birthdays[1][2].strip())
+                slack_message += " *<@{name1}>* and *<@{name2}>*.".format(name1=birthdays[0][2].strip(), name2=birthdays[1][2].strip())
                 slack_message += " Happy birthday to both! :birthdaypartyparrot: :birthdaypartyparrot:\nPray that this next year is their best yet!"
             else:
                 random.shuffle(birthdays)
