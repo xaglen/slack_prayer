@@ -60,6 +60,9 @@ def main():
         status_code = r.status_code
 
     slack_message = "In honor of Luke 10:2, every night at 10:02pm we pray for God to raise up laborers to make disciples around the world. Tonight we are praying for God to raise up disciplemakers to reach {country_name}. You can learn more about its gospel needs at {country_url}".format(country_name=country_name, country_url=country_url)
+    print(slack_message)
+
+    exit()
 
     try:
         resp=client.chat_postMessage(
