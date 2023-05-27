@@ -6,14 +6,13 @@ Anguilla,anguilla
 Albania,albania
 Armenia,armenia
 Angola,angola
-Antarctica,antarctica
 Argentina,argentina
 American Samoa,american-samoa
 Austria,austria
 Australia,australia
 Aruba,aruba
 Azerbaijan,azerbaijan
-Bosnia and Herzegovina,bosnia-and-herzegovina
+Bosnia,bosnia
 Barbados,barbados
 Bangladesh,bangladesh
 Belgium,belgium
@@ -26,19 +25,18 @@ Bermuda,bermuda
 Brunei,brunei
 Bolivia,bolivia
 Brazil,brazil
-Bahamas,bahamas
+Bahamas,bahamas-the
 Bhutan,bhutan
-Bouvet Island,bouvet-island
 Botswana,botswana
 Belarus,belarus
 Belize,belize
 Canada,canada
-Cocos [Keeling] Islands,cocos-[keeling]-islands
-Congo [DRC],congo-[drc]
+Cocos [Keeling] Islands,cocos-keeling-islands
+Congo [DRC],congo-democratic-republic-of
 Central African Republic,central-african-republic
-Congo [Republic],congo-[republic]
+Republic of Congo,congo-republic-of
 Switzerland,switzerland
-Côte d'Ivoire,côte-d'ivoire
+Côte d'Ivoire,cote-divoire
 Cook Islands,cook-islands
 Chile,chile
 Cameroon,cameroon
@@ -46,10 +44,10 @@ China,china-peoples-republic
 Colombia,colombia
 Costa Rica,costa-rica
 Cuba,cuba
-Cape Verde,cape-verde
+Cabo Verde,cabo-verde
 Christmas Island,christmas-island
 Cyprus,cyprus
-Czech Republic,czech-republic
+Czech Republic,czechia
 Germany,germany
 Djibouti,djibouti
 Denmark,denmark
@@ -65,32 +63,28 @@ Spain,spain
 Ethiopia,ethiopia
 Finland,finland
 Fiji,fiji
-Falkland Islands [Islas Malvinas],falkland-islands-[islas-malvinas]
+Falkland Islands [Islas Malvinas],falkland-islands
 Micronesia,micronesia-federated-states-of
 Faroe Islands,faroe-islands
 France,france
 Gabon,gabon
-United Kingdom,united-kingdom
+United Kingdom,united-kingdom-of-gb-ni
 Grenada,grenada
 Georgia,georgia
 French Guiana,french-guiana
-Guernsey,guernsey
 Ghana,ghana
 Gibraltar,gibraltar
 Greenland,greenland
-Gambia,gambia
+Gambia,gambia-the
 Guinea,guinea
 Guadeloupe,guadeloupe
 Equatorial Guinea,equatorial-guinea
 Greece,greece
-South Georgia and the South Sandwich Islands,south-georgia-and-the-south-sandwich-islands
 Guatemala,guatemala
 Guam,guam
 Guinea-Bissau,guinea-bissau
 Guyana,guyana
-Gaza Strip,gaza-strip
 Hong Kong,china-hong-kong
-Heard Island and McDonald Islands,heard-island-and-mcdonald-islands
 Honduras,honduras
 Croatia,croatia
 Haiti,haiti
@@ -98,14 +92,11 @@ Hungary,hungary
 Indonesia,indonesia
 Ireland,ireland
 Israel,israel
-Isle of Man,isle-of-man
 India,india
-British Indian Ocean Territory,british-indian-ocean-territory
 Iraq,iraq
 Iran,iran
 Iceland,iceland
 Italy,italy
-Jersey,jersey
 Jamaica,jamaica
 Jordan,jordan
 Japan,japan
@@ -115,8 +106,8 @@ Cambodia,cambodia
 Kiribati,kiribati
 Comoros,comoros
 Saint Kitts and Nevis,saint-kitts-nevis
-North Korea,north-korea
-South Korea,south-korea
+North Korea,korea-democratic-peoples-rep
+South Korea,korea-republic-of
 Kuwait,kuwait
 Cayman Islands,cayman-islands
 Kazakhstan,kazakhstan
@@ -163,7 +154,6 @@ Netherlands,netherlands
 Norway,norway
 Nepal,nepal
 Nauru,nauru
-Niue,niue
 New Zealand,new-zealand
 Oman,oman
 Panama,panama
@@ -173,15 +163,13 @@ Papua New Guinea,papua-new-guinea
 Philippines,philippines
 Pakistan,pakistan
 Poland,poland
-Saint Pierre and Miquelon,saint-pierre-and-miquelon
-Pitcairn Islands,pitcairn-islands
 Puerto Rico,puerto-rico
-Palestinian Territories,palestinian-territories
+Palestinian Territories,palestine
 Portugal,portugal
 Palau,palau
 Paraguay,paraguay
 Qatar,qatar
-Réunion,réunion
+Réunion,reunion
 Romania,romania
 Serbia,serbia
 Russia,russia
@@ -194,47 +182,42 @@ Sweden,sweden
 Singapore,singapore
 Saint Helena,saint-helena
 Slovenia,slovenia
-Svalbard and Jan Mayen,svalbard-and-jan-mayen
 Slovakia,slovakia
 Sierra Leone,sierra-leone
 San Marino,san-marino
 Senegal,senegal
 Somalia,somalia
 Suriname,suriname
-São Tomé and Príncipe,são-tomé-and-príncipe
+São Tomé and Príncipe,sao-tome-príncipe
 El Salvador,el-salvador
 Syria,syria
-Swaziland,swaziland
-Turks and Caicos Islands,turks-and-caicos-islands
+Turks and Caicos Islands,turks-caicos-islands
 Chad,chad
-French Southern Territories,french-southern-territories
 Togo,togo
 Thailand,thailand
 Tajikistan,tajikistan
-Tokelau,tokelau
 Timor-Leste,timor-leste
 Turkmenistan,turkmenistan
 Tunisia,tunisia
 Tonga,tonga
 Turkey,turkey
-Trinidad and Tobago,trinidad-and-tobago
+Trinidad and Tobago,trinidad-tobago
 Tuvalu,tuvalu
 Taiwan,china-taiwan
 Tanzania,tanzania
 Ukraine,ukraine
 Uganda,uganda
-U.S. Minor Outlying Islands,u.s.-minor-outlying-islands
-United States,united-states
+United States,united-states-of-america
 Uruguay,uruguay
 Uzbekistan,uzbekistan
-Vatican City,vatican-city
-Saint Vincent and the Grenadines,saint-vincent-and-the-grenadines
+Vatican City,holy-see-vatican-city-state
+Saint Vincent and the Grenadines,saint-vincent
 Venezuela,venezuela
 British Virgin Islands,british-virgin-islands
-U.S. Virgin Islands,u.s.-virgin-islands
+U.S. Virgin Islands,us-virgin-islands
 Vietnam,vietnam
 Vanuatu,vanuatu
-Wallis and Futuna,wallis-and-futuna
+Wallis and Futuna,wallis-futuna-islands
 Samoa,samoa
 Kosovo,kosovo
 Yemen,yemen
