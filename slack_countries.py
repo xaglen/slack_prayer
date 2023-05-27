@@ -85,7 +85,7 @@ def main():
 
         status_code = r.status_code
 
-    slack_message = "In honor of Luke 10:2, *every night at 10:02pm we pray for God to raise up global laborers.* Tonight we are praying for God to raise up workers for *{country_name}*. You can learn more about its gospel needs at {country_url}".format(country_name=country_name, country_url=country_url)
+    slack_message = "In honor of Luke 10:2, *every night at 10:02pm we pray for God to raise up global laborers.* Tonight we are praying for God to raise up workers for *{country_name}*. You can learn more about its gospel needs at {country_url}\n\nIf you don't have time for anything else, just cry out, 'God, send gospel workers to {country_name}!'".format(country_name=country_name, country_url=country_url)
     print(slack_message)
 
     try:
