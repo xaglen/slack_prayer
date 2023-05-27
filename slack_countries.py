@@ -42,15 +42,17 @@ def main():
     # time.
 
     with open('countries.csv', newline='') as csvfile:
-        countries = csv.reader(csvfile, delimiter=',', quotechar='"')
+        rows = csv.reader(csvfile, delimiter=',', quotechar='"')
+        countries = []
+        for row in rows:
+            countries.append(row[3])
 
     print(countries[0])
 
     status_code = 404
 
     while status_code == 404:
-        country = random.sample(countries,1)
-        country_name=country[3]
+        country_name = random.sample(countries,1)
 
         country_slug = country_name.lower().strip()
         country_slug = re.sub(r'[\s_-]+', '-', country_slug)
