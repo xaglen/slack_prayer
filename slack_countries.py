@@ -43,6 +43,23 @@ def main():
 
     with open('countries.csv', newline='') as csvfile:
         rows = csv.reader(csvfile, delimiter=',', quotechar='"')
+        new_rows = []
+        for row in rows:
+            new_rows[0] = row[3]
+            country_slug = row[3].lower().strip()
+            country_slug = re.sub(r'[\s_-]+', '-', country_slug)
+            new_rows[1] = country_slug
+
+    with open('country_slugs.csv', 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile, delimiter=',',
+                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for row in new_rows:
+            writer.writerow(row)
+
+    exit()
+
+    with open('countries.csv', newline='') as csvfile:
+        rows = csv.reader(csvfile, delimiter=',', quotechar='"')
         countries = []
         for row in rows:
             countries.append(row[3])
