@@ -61,6 +61,14 @@ def main():
         countries = []
         for row in rows:
             countries.append(row)
+            country_name = row[0]
+            country_slug = row[1]
+            country_url = "https://operationworld.org/locations/{country_slug}/".format(country_slug=country_slug)
+            r = requests.get(country_url)
+            if r.status_code==404:
+                print(country_name)
+
+    exit()
 
     status_code = 404
 

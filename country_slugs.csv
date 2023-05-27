@@ -42,7 +42,7 @@ Côte d'Ivoire,côte-d'ivoire
 Cook Islands,cook-islands
 Chile,chile
 Cameroon,cameroon
-China,china
+China,china-peoples-republic
 Colombia,colombia
 Costa Rica,costa-rica
 Cuba,cuba
@@ -66,7 +66,7 @@ Ethiopia,ethiopia
 Finland,finland
 Fiji,fiji
 Falkland Islands [Islas Malvinas],falkland-islands-[islas-malvinas]
-Micronesia,micronesia
+Micronesia,micronesia-federated-states-of
 Faroe Islands,faroe-islands
 France,france
 Gabon,gabon
@@ -89,7 +89,7 @@ Guam,guam
 Guinea-Bissau,guinea-bissau
 Guyana,guyana
 Gaza Strip,gaza-strip
-Hong Kong,hong-kong
+Hong Kong,china-hong-kong
 Heard Island and McDonald Islands,heard-island-and-mcdonald-islands
 Honduras,honduras
 Croatia,croatia
@@ -114,7 +114,7 @@ Kyrgyzstan,kyrgyzstan
 Cambodia,cambodia
 Kiribati,kiribati
 Comoros,comoros
-Saint Kitts and Nevis,saint-kitts-and-nevis
+Saint Kitts and Nevis,saint-kitts-nevis
 North Korea,north-korea
 South Korea,south-korea
 Kuwait,kuwait
@@ -137,11 +137,11 @@ Moldova,moldova
 Montenegro,montenegro
 Madagascar,madagascar
 Marshall Islands,marshall-islands
-Macedonia [FYROM],macedonia-[fyrom]
+Macedonia,north-macedonia
 Mali,mali
-Myanmar [Burma],myanmar-[burma]
+Myanmar,myanmar
 Mongolia,mongolia
-Macau,macau
+Macau,china-macau
 Northern Mariana Islands,northern-mariana-islands
 Martinique,martinique
 Mauritania,mauritania
@@ -219,7 +219,7 @@ Tonga,tonga
 Turkey,turkey
 Trinidad and Tobago,trinidad-and-tobago
 Tuvalu,tuvalu
-Taiwan,taiwan
+Taiwan,china-taiwan
 Tanzania,tanzania
 Ukraine,ukraine
 Uganda,uganda
