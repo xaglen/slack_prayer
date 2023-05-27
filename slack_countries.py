@@ -90,8 +90,8 @@ def main():
 
     try:
         resp=client.chat_postMessage(
-        #channel=settings.SLACK_CHANNEL,
-        channel="#xa-test",
+        channel=settings.SLACK_CHANNEL,
+        #channel="#xa-test",
         text=slack_message
         )
         logging.info("SUCCESSFULLY POSTED")
