@@ -50,7 +50,7 @@ def main():
     status_code = 404
 
     while status_code == 404:
-        country_name = random.sample(countries,1)
+        country_name = random.choice(countries)
         print(country_name)
 
         country_slug = country_name.lower().strip()
