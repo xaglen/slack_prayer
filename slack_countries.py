@@ -13,6 +13,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import re
 import requests
+from time import sleep
 
 import settings
 
@@ -67,6 +68,7 @@ def main():
             r = requests.get(country_url)
             if r.status_code==404:
                 print(country_name)
+            sleep(2)
 
     exit()
 
