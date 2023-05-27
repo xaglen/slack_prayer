@@ -68,6 +68,8 @@ def main():
             r = requests.get(country_url)
             if r.status_code==404:
                 print(country_name)
+            else:
+                print('+')
             sleep(2)
 
     exit()
