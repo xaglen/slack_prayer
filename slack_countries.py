@@ -47,18 +47,18 @@ def main():
         for row in rows:
             countries.append(row[3])
 
-    print(countries[0])
-
     status_code = 404
 
     while status_code == 404:
         country_name = random.sample(countries,1)
+        print(country_name)
 
         country_slug = country_name.lower().strip()
         country_slug = re.sub(r'[\s_-]+', '-', country_slug)
+        print(country_slug)
 
         country_url="https://operationworld.org/locations/{country_slug}/".format(country_slug=country_slug)
-
+        print(country_url)
         r = requests.get(country_url)
 
         status_code = r.status_code
