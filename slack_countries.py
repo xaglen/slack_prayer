@@ -41,38 +41,33 @@ def main():
     # created automatically when the authorization flow completes for the first
     # time.
 
-    with open('countries.csv', newline='') as csvfile:
-        rows = csv.reader(csvfile, delimiter=',', quotechar='"')
-        new_rows = []
-        for row in rows:
-            country_name = row[3]
-            country_slug = country_name.lower().strip()
-            country_slug = re.sub(r'[\s_-]+', '-', country_slug)
-            new_rows.append([country_name,country_slug])
+ #   with open('countries.csv', newline='') as csvfile:
+ #       rows = csv.reader(csvfile, delimiter=',', quotechar='"')
+ #       new_rows = []
+ #       for row in rows:
+ #           country_name = row[3]
+ #           country_slug = country_name.lower().strip()
+ #           country_slug = re.sub(r'[\s_-]+', '-', country_slug)
+ #           new_rows.append([country_name,country_slug])
 
-    with open('country_slugs.csv', 'w', newline='') as csvfile:
-        writer = csv.writer(csvfile, delimiter=',',
-                                quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        for row in new_rows:
-            writer.writerow(row)
+ #   with open('country_slugs.csv', 'w', newline='') as csvfile:
+ #       writer = csv.writer(csvfile, delimiter=',',
+ #                               quotechar='"', quoting=csv.QUOTE_MINIMAL)
+ #       for row in new_rows:
+ #           writer.writerow(row)
 
-    exit()
-
-    with open('countries.csv', newline='') as csvfile:
+    with open('country_slugs.csv', newline='') as csvfile:
         rows = csv.reader(csvfile, delimiter=',', quotechar='"')
         countries = []
         for row in rows:
-            countries.append(row[3])
+            countries.append(row)
 
     status_code = 404
 
     while status_code == 404:
-        country_name = random.choice(countries)
-        print(country_name)
-
-        country_slug = country_name.lower().strip()
-        country_slug = re.sub(r'[\s_-]+', '-', country_slug)
-        print(country_slug)
+        country = random.choice(countries)
+        country_name = country[0]
+        country_slug = country[1]
 
         country_url="https://operationworld.org/locations/{country_slug}/".format(country_slug=country_slug)
         print(country_url)
