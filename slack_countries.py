@@ -45,10 +45,10 @@ def main():
         rows = csv.reader(csvfile, delimiter=',', quotechar='"')
         new_rows = []
         for row in rows:
-            new_rows[0] = row[3]
-            country_slug = row[3].lower().strip()
+            country_name = row[3]
+            country_slug = country_name.lower().strip()
             country_slug = re.sub(r'[\s_-]+', '-', country_slug)
-            new_rows[1] = country_slug
+            new_rows.append([country_name,country_slug])
 
     with open('country_slugs.csv', 'w', newline='') as csvfile:
         writer = csv.writer(csvfile, delimiter=',',
