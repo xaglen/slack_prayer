@@ -64,7 +64,11 @@ def main():
 
             names = random.sample(values, 2)
 
-            slack_message = "We pray for two XA members every day, and today we're praying for"
+            slack_message = "We *pray Luke 10:2 at 10:02am every day*, \n>Ask the Lord of the harvest to send out "
+            "workers into His harvest field.\n\nPray for God to call and equip more laborers (both "
+            "globally and specifically here at Stanford)!\n\nIn addition, we pray for two XA members every day"
+            " and today we're praying for"
+
             if len(names[0])==3:
                 slack_message+=  " <@"+names[0][2].strip() + ">"
             else:
@@ -102,16 +106,13 @@ def main():
         else:
             name_substitution =  names[0][0].strip()+" and "+names[1][0].strip()
        
-        slack_message += "Pray this Biblically-inspired prayer over them based on {}\n>{}\n".format(
-                prayer[0],
-                prayer[1].replace('NAMES', name_substitution))
+        slack_message += "Pray this Biblically-inspired prayer over them based on {reference}\n>{prayer}\n".format(
+                reference=prayer[0],
+                prayer=prayer[1].replace('NAMES', name_substitution))
                 # replace NAMES in the CSV passage with the name of the two we're praying for today
 
-        slack_message += ("\nIf as you're praying for them the Lord lays something on your heart "
-        "be sure to text it to them! In addition, Chi Alpha nationally urges every student to "
-        "*pray Luke 10:2 at 10:02am every day*, \n>Ask the Lord of the harvest to send out "
-        "workers into His harvest field.\n\nPray for God to call and equip more laborers (both "
-        "globally and specifically here at Stanford)!")
+        slack_message += "\nIf as you're praying for "+name_substitution+" the Lord lays something on your heart "
+        "be sure to text it to them!"
         print (slack_message)
         
         try:
