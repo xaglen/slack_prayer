@@ -62,17 +62,15 @@ def main():
         countries = []
         for row in rows:
             countries.append(row)
-            country_name = row[0]
-            country_slug = row[1]
-            country_url = "https://operationworld.org/locations/{country_slug}/".format(country_slug=country_slug)
-            r = requests.get(country_url)
-            if r.status_code==404:
-                print(country_name)
-            else:
-                print('+')
-            sleep(2)
-
-    exit()
+            #country_name = row[0]
+            #country_slug = row[1]
+            #country_url = "https://operationworld.org/locations/{country_slug}/".format(country_slug=country_slug)
+            #r = requests.get(country_url)
+            #if r.status_code==404:
+            #    print(country_name)
+            #else:
+            #    print('+')
+            #sleep(2)
 
     status_code = 404
 
@@ -87,7 +85,7 @@ def main():
 
         status_code = r.status_code
 
-    slack_message = "In honor of Luke 10:2, every night at 10:02pm we pray for God to raise up laborers to make disciples around the world. Tonight we are praying for God to raise up disciplemakers to reach {country_name}. You can learn more about its gospel needs at {country_url}".format(country_name=country_name, country_url=country_url)
+    slack_message = "In honor of Luke 10:2, *every night at 10:02pm we pray for God to raise up global laborers.* Tonight we are praying for God to raise up workers for *{country_name}*. You can learn more about its gospel needs at {country_url}".format(country_name=country_name, country_url=country_url)
     print(slack_message)
 
     exit()
