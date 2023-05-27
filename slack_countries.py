@@ -44,6 +44,8 @@ def main():
     with open('countries.csv', newline='') as csvfile:
         countries = csv.reader(csvfile, delimiter=',', quotechar='"')
 
+    print(countries[0])
+
     status_code = 404
 
     while status_code == 404:
