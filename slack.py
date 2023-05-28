@@ -109,8 +109,7 @@ def main():
                 prayer=prayer[1].replace('NAMES', name_substitution))
                 # replace NAMES in the CSV passage with the name of the two we're praying for today
 
-        slack_message += "\nIf as you're praying for "+name_substitution+" the Lord lays something on your heart "
-        "be sure to text it to them!"
+        slack_message += "\nIf as you're praying for "+name_substitution+" the Lord lays something on your heart be sure to text it to them!"
         print (slack_message)
         
         try:
