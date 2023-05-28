@@ -64,10 +64,8 @@ def main():
 
             names = random.sample(values, 2)
 
-            slack_message = "We *pray Luke 10:2 at 10:02am every day*, \n>Ask the Lord of the harvest to send out "
-            "workers into His harvest field.\n\nPray for God to call and equip more laborers (both "
-            "globally and specifically here at Stanford)!\n\nIn addition, we pray for two XA members every day"
-            " and today we're praying for"
+            slack_message = "We *pray Luke 10:2 at 10:02am every day*, \n>Ask the Lord of the harvest to send out workers into His harvest field.\n\nPray for God to call and equip more laborers (both "
+            "globally and specifically here at Stanford)!\n\nIn addition, we pray for two XA members every day and today we're praying for"
 
             if len(names[0])==3:
                 slack_message+=  " <@"+names[0][2].strip() + ">"
