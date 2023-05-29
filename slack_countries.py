@@ -53,7 +53,7 @@ def main():
  #       for row in new_rows:
  #           writer.writerow(row)
 
-    with open('country_slugs.csv', newline='') as csvfile:
+    with open('/www/vhosts/xastanford.org/wsgi/xadb/scripts/pray/country_slugs.csv', newline='') as csvfile:
         rows = csv.reader(csvfile, delimiter=',', quotechar='"')
         countries = []
         for row in rows:
