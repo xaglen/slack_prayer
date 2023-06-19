@@ -67,7 +67,7 @@ def main():
             print (str(today.month) + "/"+str(today.day))
 
             for value in values:
-                if len(value)>=4:
+                if len(value)>=5:
                     anniversary=value[4].split('/')
                     print(anniversary[0]+"/"+anniversary[1]+" "+value[0])
                     if int(anniversary[0])==today.month and int(anniversary[1])==today.day:
