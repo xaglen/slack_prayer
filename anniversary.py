@@ -80,12 +80,12 @@ def main():
             elif len(anniversaries) == 1:
                 slack_message += " *<@{name1}>* and *<@{name2}>*.".format(name1=anniversaries[0][2].strip(),
                                                                           name2=anniversaries[0][3].strip())
-                slack_message+=" Happy anniversary! :couple_with_heart: \nPray that this next year is their best one yet!"
+                slack_message+=" Happy anniversary! :couple_with_heart: \n\nPray that this next year is their best one yet!"
             elif len(anniversaries) == 2:
                 random.shuffle(anniversaries)
                 slack_message += " *<@{name1}>* and *<@{name2}>*.".format(name1=anniversaries[0][2].strip(), name2=anniversaries[0][3].strip())
                 slack_message += " as well as *<@{name1}>* and *<@{name2}>*.".format(name1=anniversaries[1][2].strip(), name2=anniversaries[1][3].strip())
-                slack_message += " Happy anniversary to all! :couple_with_heart: \nPray that this next year is their best yet!"
+                slack_message += " Happy anniversary to all! :couple_with_heart: \n\nPray that this next year is their best yet!"
             else:
                 random.shuffle(anniversaries)
                 for anniversary in anniversaries:
@@ -104,8 +104,8 @@ def main():
         
         try:
             resp=client.chat_postMessage(
-#            channel=settings.SLACK_CHANNEL,
-            channel="#xa-test",
+            channel=settings.SLACK_CHANNEL,
+#            channel="#xa-test",
             text=slack_message
             )
             logging.info("SUCCESSFULLY POSTED")
