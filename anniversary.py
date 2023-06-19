@@ -1,5 +1,5 @@
 """
-Generates daily prayer reminders.
+Generates birthday daily prayer reminders.
 """
 from __future__ import print_function
 
@@ -26,7 +26,7 @@ logging.basicConfig(
         datefmt='%Y-%m-%d %H:%M:%S',
         encoding="utf-8", 
         level=logging.INFO)
-logging.info("NEW RUN")
+logging.info("NEW ANNIVERSARY RUN")
 
 #logger = logging.getLogger(__name__)
 #journald_handler = JournaldLogHandler()
@@ -37,8 +37,7 @@ logging.info("NEW RUN")
 client = WebClient(token=settings.SLACK_TOKEN)
 
 def main():
-    """Retrieves two names from a Google spreadsheet and plugs them into
-    text drawn from a CSV file.
+    """Scans names from a Google spreadsheet looking for birthdays that match today
     """
     creds = None
     # The file token.json stores the user's access and refresh tokens, and is
@@ -55,68 +54,53 @@ def main():
             # Call the Sheets API
             sheet = service.spreadsheets()
             result = sheet.values().get(spreadsheetId=settings.GOOGLE_SPREADSHEET_ID,
-                                        range=settings.SPREADSHEET_RANGE_NAME).execute()
+                                        range=settings.BIRTHDAY_RANGE_NAME).execute()
             values = result.get('values', [])
 
             if not values:
                 print('No data found.')
                 return
 
-            names = random.sample(values, 2)
+            birthdays=[]
 
-            slack_message = "We *pray Luke 10:2 at 10:02am every day*," \
-                            "\n>Ask the Lord of the harvest to send out workers into His harvest field.\n\n" \
-                            "Pray for God to call and equip more laborers (both globally and specifically here at Stanford)!\n\n" \
-                            "In addition, we pray for two XA members every day and today we're praying for"
+            today = date.today()
+            print (str(today.month) + "/"+str(today.day))
 
-            if len(names[0])==3:
-                slack_message+=  " <@"+names[0][2].strip() + ">"
+            for value in values:
+                if len(value)>=4:
+                    birthday=value[3].split('/')
+                    print(birthday[0]+"/"+birthday[1]+" "+value[0])
+                    if int(birthday[0])==today.month and int(birthday[1])==today.day:
+                        birthdays.append(value)
+                        print("ADDED")
+
+            slack_message = "We pray for people on their birthday, and today we're praying for"
+            if len(birthdays)==0:
+                exit()
+            elif len(birthdays) == 1:
+                slack_message+=" <@"+birthdays[0][2].strip() + ">. Happy birthday! :birthdaypartyparrot: \nPray that this next year is "+birthdays[0][0].strip()+"'s best one yet!"
+            elif len(birthdays) == 2:
+                random.shuffle(birthdays)
+                slack_message += " *<@{name1}>* and *<@{name2}>*.".format(name1=birthdays[0][2].strip(), name2=birthdays[1][2].strip())
+                slack_message += " Happy birthday to both! :birthdaypartyparrot: :birthdaypartyparrot:\nPray that this next year is their best yet!"
             else:
-                slack_message+= " "+names[0][0].strip()+ " " + names[0][1].strip()
+                random.shuffle(birthdays)
+                for birthday in birthdays:
+                    if birthday == birthdays[-1]:
+                        slack_message+=" *and* <@"+birthday[2].strip()+">!"
+                    else:
+                        slack_message+=" <@"+birthday[2].strip()+">, "
+                slack_message+=" Happy birthday to all! :birthdaypartyparrot: :birthday: :meow_birthday: :birthdaypartyparrot:\nPray that this next year is their best yet!"
 
-            if len(names[1])==3:
-                slack_message+= " and <@" + names[1][2].strip() + ">\n\n"
-            else:
-                slack_message+= " and " + names[1][0].strip()+" "+names[1][1].strip()+"\n\n"
-
-#            for name in names:
-#                slack_message += name[0]+' '+name[1]
-#                print('%s %s' % (name[0], name[1]))
-            #for row in values:
-                # Print columns A and E, which correspond to indices 0 and 4.
-              #print('%s, %s' % (row[0], row[1]))
         except HttpError as err:
             print(err)
 
-        with open('/www/vhosts/xastanford.org/wsgi/xadb/scripts/pray/prayer.csv', newline='') as csvfile:
-            prayers = list(csv.reader(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL, skipinitialspace=True))
-            csvfile.close()
-
-        start = date(2022, 6, 12)
-        today = date.today()
-        which_prayer = (today-start).days % len(prayers)
-        #go through the prayers in sequence
-
-        prayer = prayers[which_prayer]
-
-        #prayer = random.choice(prayers)
-
-        if names[0][0].strip() == names[1][0].strip(): #they have the same first name
-            name_substitution = names[0][0].strip()+"^2"
-        else:
-            name_substitution =  names[0][0].strip()+" and "+names[1][0].strip()
-       
-        slack_message += "Pray this Biblically-inspired prayer over them based on {reference}\n>{prayer}\n".format(
-                reference=prayer[0],
-                prayer=prayer[1].replace('NAMES', name_substitution))
-                # replace NAMES in the CSV passage with the name of the two we're praying for today
-
-        slack_message += "\nIf as you're praying for "+name_substitution+" the Lord lays something on your heart be sure to text it to them!"
         print (slack_message)
         
         try:
             resp=client.chat_postMessage(
             channel=settings.SLACK_CHANNEL,
+#            channel="#xa-test",
             text=slack_message
             )
             logging.info("SUCCESSFULLY POSTED")
