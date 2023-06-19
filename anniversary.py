@@ -54,43 +54,48 @@ def main():
             # Call the Sheets API
             sheet = service.spreadsheets()
             result = sheet.values().get(spreadsheetId=settings.GOOGLE_SPREADSHEET_ID,
-                                        range=settings.BIRTHDAY_RANGE_NAME).execute()
+                                        range=settings.ANNIVERSARY_RANGE_NAME).execute()
             values = result.get('values', [])
 
             if not values:
                 print('No data found.')
                 return
 
-            birthdays=[]
+            anniversaries=[]
 
             today = date.today()
             print (str(today.month) + "/"+str(today.day))
 
             for value in values:
                 if len(value)>=4:
-                    birthday=value[3].split('/')
-                    print(birthday[0]+"/"+birthday[1]+" "+value[0])
-                    if int(birthday[0])==today.month and int(birthday[1])==today.day:
-                        birthdays.append(value)
+                    anniversary=value[4].split('/')
+                    print(anniversary[0]+"/"+anniversary[1]+" "+value[0])
+                    if int(anniversary[0])==today.month and int(anniversary[1])==today.day:
+                        anniversaries.append(value)
                         print("ADDED")
 
-            slack_message = "We pray for people on their birthday, and today we're praying for"
-            if len(birthdays)==0:
+            slack_message = "We pray for married couples on their anniversary, and today we're praying for"
+            if len(anniversaries)==0:
                 exit()
-            elif len(birthdays) == 1:
-                slack_message+=" <@"+birthdays[0][2].strip() + ">. Happy birthday! :birthdaypartyparrot: \nPray that this next year is "+birthdays[0][0].strip()+"'s best one yet!"
-            elif len(birthdays) == 2:
-                random.shuffle(birthdays)
-                slack_message += " *<@{name1}>* and *<@{name2}>*.".format(name1=birthdays[0][2].strip(), name2=birthdays[1][2].strip())
-                slack_message += " Happy birthday to both! :birthdaypartyparrot: :birthdaypartyparrot:\nPray that this next year is their best yet!"
+            elif len(anniversaries) == 1:
+                slack_message += " *<@{name1}>* and *<@{name2}>*.".format(name1=anniversaries[0][2].strip(),
+                                                                          name2=anniversaries[0][3].strip())
+                slack_message+=" Happy anniversary! :couple_with_heart: \nPray that this next year is their best one yet!"
+            elif len(anniversaries) == 2:
+                random.shuffle(anniversaries)
+                slack_message += " *<@{name1}>* and *<@{name2}>*.".format(name1=anniversaries[0][2].strip(), name2=anniversaries[0][3].strip())
+                slack_message += " as well as *<@{name1}>* and *<@{name2}>*.".format(name1=anniversaries[1][2].strip(), name2=anniversaries[1][3].strip())
+                slack_message += " Happy anniversary to all! :couple_with_heart: \nPray that this next year is their best yet!"
             else:
-                random.shuffle(birthdays)
-                for birthday in birthdays:
-                    if birthday == birthdays[-1]:
-                        slack_message+=" *and* <@"+birthday[2].strip()+">!"
+                random.shuffle(anniversaries)
+                for anniversary in anniversaries:
+                    if anniversary == anniversaries[-1]:
+                        slack_message += " *and* <@{name1}>* & *<@{name2}>!".format(name1=anniversary[2].strip(),
+                                                                                  name2=anniversary[3].strip())
                     else:
-                        slack_message+=" <@"+birthday[2].strip()+">, "
-                slack_message+=" Happy birthday to all! :birthdaypartyparrot: :birthday: :meow_birthday: :birthdaypartyparrot:\nPray that this next year is their best yet!"
+                        slack_message += " <@{name1}>* & *<@{name2}>, ".format(name1=anniversary[2].strip(),
+                                                                                  name2=anniversary[3].strip())
+                slack_message+=" Happy anniversary to all! Pray amazing blessings over these couples!"
 
         except HttpError as err:
             print(err)
@@ -99,8 +104,8 @@ def main():
         
         try:
             resp=client.chat_postMessage(
-            channel=settings.SLACK_CHANNEL,
-#            channel="#xa-test",
+#            channel=settings.SLACK_CHANNEL,
+            channel="#xa-test",
             text=slack_message
             )
             logging.info("SUCCESSFULLY POSTED")
