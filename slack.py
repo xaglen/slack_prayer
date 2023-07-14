@@ -67,8 +67,7 @@ def main():
 
             slack_message = "We *pray Luke 10:2 at 10:02am* every day," \
                             "\n>Ask the Lord of the harvest to send out workers into His harvest field.\n\n" \
-                            "Pray for God to call and equip more laborers!\n\n" \
-                            "First, pray for God's servants at Stanford to be effective laborers here. Today pray this Biblically-inspired prayer over"
+                            "First, pray for Chi Alpha members at Stanford to be effective ambassadors for Christ. Pray this Biblically-inspired prayer over"
 
             if len(names[0])==3:
                 slack_message+=  " <@"+names[0][2].strip() + ">"
@@ -76,9 +75,9 @@ def main():
                 slack_message+= " "+names[0][0].strip()+ " " + names[0][1].strip()
 
             if len(names[1])==3:
-                slack_message+= " and <@" + names[1][2].strip() + ">\n\n"
+                slack_message+= " and <@" + names[1][2].strip() + ">"
             else:
-                slack_message+= " and " + names[1][0].strip()+" "+names[1][1].strip()+"\n\n"
+                slack_message+= " and " + names[1][0].strip()+" "+names[1][1].strip()+""
 
 #            for name in names:
 #                slack_message += name[0]+' '+name[1]
@@ -107,12 +106,12 @@ def main():
         else:
             name_substitution =  names[0][0].strip()+" and "+names[1][0].strip()
        
-        slack_message += "Pray this Biblically-inspired prayer over them based on {reference}\n>{prayer}\n".format(
+        slack_message += " based on {reference}\n>{prayer}\n\n".format(
                 reference=prayer[0],
                 prayer=prayer[1].replace('NAMES', name_substitution))
                 # replace NAMES in the CSV passage with the name of the two we're praying for today
 
-        slack_message += "\nIf as you're praying for "+name_substitution+" the Lord lays something on your heart be sure to text it to them!\n\n"
+        slack_message += "If as you're praying for "+name_substitution+" the Lord lays something on your heart be sure to text it to them!\n\n"
 
         with open('/www/vhosts/xastanford.org/wsgi/xadb/scripts/pray/country_slugs.csv', newline='') as csvfile:
             rows = csv.reader(csvfile, delimiter=',', quotechar='"')
