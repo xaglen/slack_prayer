@@ -8,6 +8,7 @@ import random
 import logging
 import csv
 import sys
+import requests
 from datetime import date
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
@@ -64,10 +65,10 @@ def main():
 
             names = random.sample(values, 2)
 
-            slack_message = "We *pray Luke 10:2 at 10:02am every day*," \
+            slack_message = "We *pray Luke 10:2 at 10:02am* every day," \
                             "\n>Ask the Lord of the harvest to send out workers into His harvest field.\n\n" \
-                            "Pray for God to call and equip more laborers (both globally and specifically here at Stanford)!\n\n" \
-                            "In addition, we pray for two XA members every day and today we're praying for"
+                            "Pray for God to call and equip more laborers!\n\n" \
+                            "First, pray for God's servants at Stanford to be effective laborers here. Today pray this Biblically-inspired prayer over"
 
             if len(names[0])==3:
                 slack_message+=  " <@"+names[0][2].strip() + ">"
@@ -111,7 +112,29 @@ def main():
                 prayer=prayer[1].replace('NAMES', name_substitution))
                 # replace NAMES in the CSV passage with the name of the two we're praying for today
 
-        slack_message += "\nIf as you're praying for "+name_substitution+" the Lord lays something on your heart be sure to text it to them!"
+        slack_message += "\nIf as you're praying for "+name_substitution+" the Lord lays something on your heart be sure to text it to them!\n\n"
+
+        with open('/www/vhosts/xastanford.org/wsgi/xadb/scripts/pray/country_slugs.csv', newline='') as csvfile:
+            rows = csv.reader(csvfile, delimiter=',', quotechar='"')
+            countries = []
+            for row in rows:
+                countries.append(row)
+
+        status_code = 404
+
+        while status_code == 404:
+            country = random.choice(countries)
+            country_name = country[0]
+            country_slug = country[1]
+
+            country_url = "https://operationworld.org/locations/{country_slug}/".format(country_slug=country_slug)
+            print(country_url)
+            r = requests.get(country_url)
+
+            status_code = r.status_code
+
+        slack_message += "In addition, *pray for God's work around the world*, especially in *{country_name}*. You can learn more about its gospel needs at {country_url}\n\nIf you don't have time for anything else, just cry out, 'God, send gospel workers to {country_name}!'".format(
+            country_name=country_name, country_url=country_url)
         print (slack_message)
         
         try:
