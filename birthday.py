@@ -72,7 +72,7 @@ def main():
                     print(birthday[0]+"/"+birthday[1]+" "+value[0])
                     if int(birthday[0])==today.month and int(birthday[1])==today.day:
                         birthdays.append(value)
-                        print("ADDED")
+                        print("ADDED "+value[0])
 
             slack_message = "We pray for people on their birthday, and today we're praying for"
             if len(birthdays)==0:
