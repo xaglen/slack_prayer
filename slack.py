@@ -65,9 +65,7 @@ def main():
 
             names = random.sample(values, 2)
 
-            slack_message = "We *pray Luke 10:2 at 10:02am* every day," \
-                            "\n>Ask the Lord of the harvest to send out workers into His harvest field.\n\n" \
-                            "First, pray for Chi Alpha members at Stanford to be effective ambassadors for Christ. Pray this Biblically-inspired prayer over"
+            slack_message = "Pray for "
 
             if len(names[0])==3:
                 slack_message+=  " <@"+names[0][2].strip() + ">"
@@ -78,6 +76,10 @@ def main():
                 slack_message+= " and <@" + names[1][2].strip() + ">"
             else:
                 slack_message+= " and " + names[1][0].strip()+" "+names[1][1].strip()+""
+
+            slack_message = "\n\nIn addition since it is 10:02am, *pray Luke 10:2*: " \
+                            "Ask the Lord of the harvest to send out workers into His harvest field.\n\n" \
+                            "As part of that prayer, pray for Chi Alpha members at Stanford to be effective ambassadors for Christ. Pray this Biblically-inspired prayer over the people at the top of this message."
 
 #            for name in names:
 #                slack_message += name[0]+' '+name[1]
@@ -111,8 +113,6 @@ def main():
                 prayer=prayer[1].replace('NAMES', name_substitution))
                 # replace NAMES in the CSV passage with the name of the two we're praying for today
 
-        slack_message += "If as you're praying for "+name_substitution+" the Lord lays something on your heart be sure to text it to them!\n\n"
-
         with open('/www/vhosts/xastanford.org/wsgi/xadb/scripts/pray/country_slugs.csv', newline='') as csvfile:
             rows = csv.reader(csvfile, delimiter=',', quotechar='"')
             countries = []
@@ -132,7 +132,7 @@ def main():
 
             status_code = r.status_code
 
-        slack_message += "In addition, *pray for God's work around the world*, especially in *{country_name}*. You can learn more about its gospel needs at {country_url}\n\nIf you don't have time for anything else, just cry out, 'God, send gospel workers to {country_name}!'".format(
+        slack_message += "On top of that, *pray for God's work around the world*, especially in *{country_name}*. You can learn more about its gospel needs at {country_url}\n\nIf you don't have time for anything else, just cry out, 'God, send gospel workers to {country_name}!'".format(
             country_name=country_name, country_url=country_url)
         print (slack_message)
         
