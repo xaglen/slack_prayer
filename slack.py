@@ -37,6 +37,8 @@ logging.info("NEW RUN")
 
 client = WebClient(token=settings.SLACK_TOKEN)
 
+
+
 def main():
     """Retrieves two names from a Google spreadsheet and plugs them into
     text drawn from a CSV file.
