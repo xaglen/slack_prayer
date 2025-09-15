@@ -77,7 +77,7 @@ def main():
             else:
                 slack_message+= " and " + names[1][0].strip()+" "+names[1][1].strip()+""
 
-            slack_message += " inspired by this language"
+            slack_message += ". You can pray for them however you want, but consider learning to pray Scripturally by modeling your prayer on "
 
 #            for name in names:
 #                slack_message += name[0]+' '+name[1]
@@ -106,11 +106,11 @@ def main():
         else:
             name_substitution =  names[0][0].strip()+" and "+names[1][0].strip()
        
-        slack_message += " based on {reference}\n>{prayer}\n\n".format(
+        slack_message += "{reference}, like so:\n\n>{prayer}".format(
                 reference=prayer[0],
                 prayer=prayer[1].replace('NAMES', name_substitution))
                 # replace NAMES in the CSV passage with the name of the two we're praying for today
-
+        '''
         with open('/www/vhosts/xastanford.org/wsgi/xadb/scripts/pray/country_slugs.csv', newline='') as csvfile:
             rows = csv.reader(csvfile, delimiter=',', quotechar='"')
             countries = []
@@ -136,7 +136,7 @@ def main():
                             "*pray for God's work around the world*, especially in *{country_name}*. You can learn more about its gospel needs at {country_url}\n\nIf you don't have time for anything else, just cry out, 'God, send gospel workers to {country_name}!'".format(
             country_name=country_name, country_url=country_url)
         print (slack_message)
-        
+        '''      
         try:
             resp=client.chat_postMessage(
             channel="#xa-members",
