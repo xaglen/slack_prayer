@@ -24,11 +24,11 @@ import random
 
 import settings
 
-# uncomment the next line in production
+# comment the next line in production
 ic.disable()
 
 logging.basicConfig(
-        filename="pray.log.txt", 
+        filename="pray.log", 
         format='%(asctime)s %(levelname)-8s %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S',
         encoding="utf-8", 
@@ -48,7 +48,7 @@ class SlackMentionTracker:
         self.client = client
 
     def scan_channel_mentions(self, channel_id, days=30):
-        """
+        """   WP6P7G97S
         Scan a Slack channel for user mentions in the last N days
         Returns a dictionary with user IDs and their last mention timestamps
         """
@@ -78,9 +78,9 @@ class SlackMentionTracker:
                     message_ts = float(message['ts'])
                     message_dt = datetime.fromtimestamp(message_ts, tz=timezone.utc)
 
-                    # Find user mentions in the format <@U12345678>
+                    # Find user mentions in the format <@*12345678>
                     import re
-                    mentions = re.findall(r'<@(U[A-Z0-9]+)>', message_text)
+                    mentions = re.findall(r'<@([A-Z0-9]+)>', message_text)
 
                     for user_id in mentions:
                         # Update if this is the first mention or more recent
@@ -163,6 +163,9 @@ def select_weighted_users(prioritized_users, num_users=2):
             days_since_mention = (datetime.now(timezone.utc) - user['last_mentioned']).days
             weight = max(1, days_since_mention * 10)
         weights.append(weight)
+    
+    ic(prioritized_users)
+    ic(weights)
 
     # Select users without replacement
     selected = []
@@ -171,6 +174,7 @@ def select_weighted_users(prioritized_users, num_users=2):
 
     for _ in range(min(num_users, len(users_copy))):
         chosen = random.choices(users_copy, weights=weights_copy, k=1)[0]
+        ic(chosen)
         selected.append(chosen)
 
         # Remove selected user to avoid duplicates
@@ -278,7 +282,7 @@ def main():
         slack_message += "\n\n_note that the Bible prayers repeatedly focus on (1) personal spiritual growth and blessing (2) fruitful evangelism and (3) unity in the Body - this should shape our regular prayer lives_"
 
         ic(slack_message)
-
+        #exit()
         try:
             resp=client.chat_postMessage(
             channel=settings.SLACK_MEMBERS_CHANNEL,
