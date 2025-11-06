@@ -24,7 +24,7 @@ import random
 
 import settings
 
-# comment the next line in production
+# comment the next line to test
 ic.disable()
 
 logging.basicConfig(
