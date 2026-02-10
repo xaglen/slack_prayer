@@ -24,7 +24,7 @@ import random
 
 import settings
 
-# comment the next line to test
+# comment the next line to test; note that the DEFAULT is to run a test
 ic.disable()
 
 logging.basicConfig(
@@ -33,7 +33,11 @@ logging.basicConfig(
         datefmt='%Y-%m-%d %H:%M:%S',
         encoding="utf-8", 
         level=logging.INFO)
-logging.info("NEW RUN")
+
+if ic.enabled:
+    logging.info("TEST RUN - THIS WILL NOT POST")
+else:
+    logging.info("NEW RUN")
 
 #logger = logging.getLogger(__name__)
 #journald_handler = JournaldLogHandler()
@@ -132,6 +136,7 @@ def prioritize_users(users, last_mentions):
                 'user_id': user_id,
                 'last_mentioned': last_mentions[user_id]
             })
+            ic(f"{user_firstname} {user_lastname} last mentioned on {last_mentions[user_id]}")
         else:
             never_mentioned.append({
                 'user_first_name': user_firstname,
@@ -139,6 +144,7 @@ def prioritize_users(users, last_mentions):
                 'user_id': user_id,
                 'last_mentioned': None
             })
+            ic(f"{user_firstname} {user_lastname} NEVER MENTIONED")
 
     # Sort mentioned users by last mention date (oldest first)
     mentioned_users.sort(key=lambda x: x['last_mentioned'])
@@ -219,6 +225,8 @@ def main():
 
             never_mentioned, mentioned_users = prioritize_users(values, mention_history)
             prioritized_users = never_mentioned + mentioned_users
+            ic(prioritized_users)
+            #exit()
 
             ic(f"\nResults:")
             ic("- Users with mentions in last 30 days:")
@@ -282,7 +290,9 @@ def main():
         slack_message += "\n\n_note that the Bible prayers repeatedly focus on (1) personal spiritual growth and blessing (2) fruitful evangelism and (3) unity in the Body - this should shape our regular prayer lives_"
 
         ic(slack_message)
-        #exit()
+        if ic.enabled:
+            exit()
+
         try:
             resp=client.chat_postMessage(
             channel=settings.SLACK_MEMBERS_CHANNEL,
