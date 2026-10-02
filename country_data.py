@@ -215,7 +215,7 @@ def _continent_from_jp_row(row):
         return None
     continent = REGION_MAP.get(region_name)
     if continent is None:
-        logging.info(f"country_data: unmapped Joshua Project RegionName {row.get('RegionName')!r}")
+        logging.warning(f"country_data: unmapped Joshua Project RegionName {row.get('RegionName')!r}")
     return continent
 
 

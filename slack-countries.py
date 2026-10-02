@@ -20,7 +20,6 @@ import requests
 import settings
 from blockkit import Image, Message, Section
 from bs4 import BeautifulSoup
-from icecream import ic
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 
@@ -32,22 +31,15 @@ import django
 
 django.setup()
 
-ic.disable()
+try:
+    # XADB deployment: persistent log in /var/log/xadb + Sentry alerts on errors.
+    # After django.setup(), so this Sentry init (with the cron_script tag) wins.
+    _sys.path.insert(0, "/www/vhosts/xastanford.org/wsgi/xadb/scripts")
+    import cron_logging
 
-logging.basicConfig(
-    filename="pray.log.txt",
-    format="%(asctime)s %(levelname)-8s %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    encoding="utf-8",
-    level=logging.INFO,
-)
-logging.info("NEW COUNTRIES RUN")
-
-# logger = logging.getLogger(__name__)
-# journald_handler = JournaldLogHandler()
-# journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %message)s'))
-# logger.addHandler(journald_handler)
-# logger.setLevel(logging.INFO)
+    cron_logging.setup("pray-countries")
+except ImportError:
+    logging.basicConfig(level=logging.INFO)
 
 client = WebClient(token=settings.SLACK_TOKEN)
 
@@ -73,17 +65,17 @@ def get_paragraph_from_operation_world(url):
                 paragraph_text = content_div.get_text(strip=True)
                 return paragraph_text
             else:
-                ic("Could not find div with class 'the-content'")
+                logging.warning(f"Operation World page layout changed? no div.the-content in div.w-prayer at {url}")
                 return None
         else:
-            ic("Could not find div with class 'w-prayer'")
+            logging.warning(f"Operation World page layout changed? no div.w-prayer at {url}")
             return None
 
     except requests.RequestException as e:
-        logging.info(f"Error fetching the website: {e}")
+        logging.warning(f"Error fetching Operation World paragraph: {e}")
         return None
     except Exception as e:
-        logging.info(f"An error occurred: {e}")
+        logging.exception(f"Error parsing Operation World paragraph from {url}")
         return None
 
 
@@ -172,10 +164,13 @@ def main():
             if status_code != 404:
                 break
         else:
-            logging.warning("No country with a live Operation World page after fallback; not posting")
-            print("No country with a live Operation World page after fallback; not posting")
-            return
+            logging.error("No country with a live Operation World page after fallback; not posting")
+            sys.exit(1)
 
+    logging.info(
+        f"Picked {country_name} ({'weighted pool of ' + str(len(pool)) if pool else 'no JP pool'}, "
+        f"region of the week: {country_data.continent_of_the_week()}, OW status {status_code})"
+    )
     prayer_paragraph = get_paragraph_from_operation_world(country_url)
 
     jp_link = f"<{jp_url}|Joshua Project>" if jp_url else "Joshua Project"
@@ -210,8 +205,6 @@ def main():
     payload = msg.build()
     fallback_text = f"This week intercede for {country_name} in your daily prayers. {wikipedia_url}"
 
-    # ic(payload)
-    # exit()
     try:
         resp = client.chat_postMessage(
             channel=settings.SLACK_PRAYER_CHANNEL,
@@ -219,8 +212,21 @@ def main():
             text=fallback_text,
             blocks=payload["blocks"],
         )
-        logging.info("SUCCESSFULLY POSTED")
-        logging.info(payload)
+    except SlackApiError as e:
+        # You will get a SlackApiError if "ok" is False
+        logging.error(f"Slack error posting prayer focus: {e.response.get('error')}", exc_info=True)
+        logging.debug(payload)
+        sys.exit(1)
+    except Exception:
+        logging.exception("Error posting prayer focus")
+        sys.exit(1)
+    logging.info(
+        f"Posted {country_name} to {settings.SLACK_PRAYER_CHANNEL} (ts {resp.get('ts')}, "
+        f"OW paragraph {len(prayer_paragraph or '')} chars, JP facts {'yes' if facts_lines else 'no'})"
+    )
+    logging.debug(payload)
+
+    try:
         from people.models import CountryPrayer
 
         CountryPrayer.objects.create(
@@ -229,23 +235,10 @@ def main():
             wikipedia_url=wikipedia_url,
             prayer_text=prayer_paragraph or "",
         )
-    except SlackApiError as e:
-        # You will get a SlackApiError if "ok" is False
-        message = "Slack error posting prayer focus"
-        logging.info(message)
-        logging.info(e)
-        logging.info(e.response)
-    #        print(message)
-    #        print(e)
-    except TypeError as e:
-        message = "TypeError posting prayer focus: {}".format(repr(e))
-        logging.info(message)
-    #    print(message+": "+repr(e))
-    except:
-        e = repr(sys.exc_info()[0])
-        message = "Error posting prayer focus: {}".format(e)
-        logging.info(message)
-    #    print(message+": "+e)
+    except Exception:
+        # the post is out; without the row /pray/ misses it and recency dedup may repeat the country
+        logging.exception(f"Posted {country_name} but could not save its CountryPrayer row")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
