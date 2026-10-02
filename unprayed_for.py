@@ -1,24 +1,25 @@
 """
 Generates an list of those who were not prayed for during the previous month summmary for Slack.
 """
-#import json
-import pprint
+
+# import json
 import logging
-import sys, os
+import os
+import pprint
 import re
+import sys
 import time
-from datetime import timedelta, datetime
 from collections import Counter
+from datetime import datetime, timedelta
+
+import gspread
+
+# from systemd.journal import JournaldLogHandler
+import settings
+from google.oauth2 import service_account
+from google.oauth2.credentials import Credentials
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
-from google.oauth2.credentials import Credentials
-from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
-from google.oauth2 import service_account
-
-#from systemd.journal import JournaldLogHandler
-
-import settings
 
 
 def fetch_candidates():
@@ -26,8 +27,8 @@ def fetch_candidates():
     client = WebClient(token=settings.SLACK_TOKEN)
     try:
         resp = client.conversations_members(
-            channel="C03PWTSSE04", #xa-members
-            limit=200 #max 1000, default 100
+            channel="C03PWTSSE04",  # xa-members
+            limit=200,  # max 1000, default 100
         )
     except SlackApiError as e:
         # You will get a SlackApiError if "ok" is False
@@ -39,36 +40,37 @@ def fetch_candidates():
 
     print("{} candidates".format(len(candidates)))
 
-    for member in resp['members']:
-        #TODO remove Scorekeeper / bots in general / Glen
+    for member in resp["members"]:
+        # TODO remove Scorekeeper / bots in general / Glen
         candidates.add(member)
 
     return candidates
 
-def fetch_activity(client = None, channel=None, open_season=None, close_season=None):
+
+def fetch_activity(client=None, channel=None, open_season=None, close_season=None):
     """
     Retrieves posts from slack channel.
 
     Retrieves all posts from the given slack channel between open_season and close_season.
     """
     try:
-        #data = json.loads(request.body.decode('utf-8'))
+        # data = json.loads(request.body.decode('utf-8'))
         result = client.conversations_history(
-                channel=channel,
-                oldest=open_season.timestamp(),
-                latest=close_season.timestamp())
+            channel=channel, oldest=open_season.timestamp(), latest=close_season.timestamp()
+        )
         conversation_history = []
-        conversation_history += result['messages']
-        ts_list = [item['ts'] for item in conversation_history]
+        conversation_history += result["messages"]
+        ts_list = [item["ts"] for item in conversation_history]
         last_ts = ts_list[:-1]
-        while result['has_more']:
+        while result["has_more"]:
             result = client.conversations_history(
                 channel=channel,
-                cursor=result['response_metadata']['next_cursor'],
+                cursor=result["response_metadata"]["next_cursor"],
                 latest=last_ts,
-                oldest=open_season.timestamp())
-            conversation_history+=result['messages']
-         #logger.info(repr(data))
+                oldest=open_season.timestamp(),
+            )
+            conversation_history += result["messages"]
+    # logger.info(repr(data))
     except SlackApiError as e:
         print(repr(e))
         return conversation_history
@@ -83,54 +85,54 @@ def main():
     start_time = time.time()
 
     logger = logging.getLogger(__name__)
-    #journald_handler = JournaldLogHandler()
-    #journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %message)s'))
-    #logger.addHandler(journald_handler)
+    # journald_handler = JournaldLogHandler()
+    # journald_handler.setFormatter(logging.Formatter('[%(levelname)s] %message)s'))
+    # logger.addHandler(journald_handler)
     logger.setLevel(logging.INFO)
 
     last_month = datetime.today().replace(day=1) - timedelta(days=1)
     first_of_month = datetime.combine(last_month.replace(day=1), datetime.min.time())
     # datetime.min.time produces midnight
     # getting previous month because this runs on midnight in the next month
-    last_of_month = datetime.now() # run from a CRON
+    last_of_month = datetime.now()  # run from a CRON
 
     client = WebClient(token=settings.SLACK_TOKEN)
 
-    #pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(conversation_history)
-    #exit()
-    #print(conversation_history)
+    # pp = pprint.PrettyPrinter(indent=4)
+    # pp.pprint(conversation_history)
+    # exit()
+    # print(conversation_history)
 
-    overlooked=fetch_candidates()
+    overlooked = fetch_candidates()
 
     print("Potential: {}".format(len(overlooked)))
-    #print("Type of items in the list: {}".format(type(overlooked[0])))
+    # print("Type of items in the list: {}".format(type(overlooked[0])))
 
     conversation_history = fetch_activity(
-            client,
-            'C019QQ22FJ6', #xa-prayer
-            first_of_month,
-            last_of_month
-            )
+        client,
+        "C019QQ22FJ6",  # xa-prayer-and-praise
+        first_of_month,
+        last_of_month,
+    )
     for message in conversation_history:
-        ts = int(message['ts'].split('.')[0])
-        #timestamp = datetime.fromtimestamp(ts)
+        ts = int(message["ts"].split(".")[0])
+        # timestamp = datetime.fromtimestamp(ts)
         if first_of_month.timestamp() <= ts < last_of_month.timestamp():
-            #TODO check if posted by prayer bot
+            # TODO check if posted by prayer bot
             pprint.pformat(message)
-            if 'text' in message:
-                if '@' in message['text']:
-                    regex = r'\<\@(.*?)\>'
-                    hits = re.findall(regex, message['text'])
+            if "text" in message:
+                if "@" in message["text"]:
+                    regex = r"\<\@(.*?)\>"
+                    hits = re.findall(regex, message["text"])
                     for hit in hits:
                         overlooked.discard(hit)
-            #else was a bot
+            # else was a bot
 
     exit()
 
-    print ("Overlooked: {}".format(len(overlooked)))
-    #print("Type of hits attempting to remove from the list: {}".format(type(hit)))
-    #print("Type of users attempting to remove from the list: {}".format(type(message['user'])))
+    print("Overlooked: {}".format(len(overlooked)))
+    # print("Type of hits attempting to remove from the list: {}".format(type(hit)))
+    # print("Type of users attempting to remove from the list: {}".format(type(message['user'])))
 
     final_overlooked = set()
 
@@ -139,36 +141,36 @@ def main():
         final_overlooked.add("<@" + person + ">")
 
     try:
-        title = "Overlooked In I-See-You: "+ season_title
-        resp=client.chat_postMessage(
+        title = "Overlooked In I-See-You: " + season_title
+        resp = client.chat_postMessage(
             channel=settings.OVERLOOKED_WRITE_CHANNEL_ID,
-            text="Not tagged nor taggers in I See You last month: " + " ".join(final_overlooked)
+            text="Not tagged nor taggers in I See You last month: " + " ".join(final_overlooked),
         )
     except SlackApiError as e:
         # You will get a SlackApiError if "ok" is False
         message = "\nSlackApiError: Slack error posting tally\n"
-        message += " "+repr(e)+"\n"
-        message += " "+repr(e.response)+"\n"
+        message += " " + repr(e) + "\n"
+        message += " " + repr(e.response) + "\n"
         logger.info(message)
         print(message)
         print(e)
     except TypeError as e:
-        message = "TypeError posting tally: "+ repr(e)
+        message = "TypeError posting tally: " + repr(e)
         logger.info(message)
         #    print(message+": "+repr(e))
-    except:# pylint: disable=bare-except
+    except:  # pylint: disable=bare-except
         e = repr(sys.exc_info()[0])
-        message = "Error posting tally: "+ e
+        message = "Error posting tally: " + e
         logger.info(message)
 
-    try: # pylint: disable=bare-except
+    try:  # pylint: disable=bare-except
         print(message)
-    except: # pylint: disable=bare-except
+    except:  # pylint: disable=bare-except
         pass
 
-    execution_time = (time.time() - start_time)
-    print('Execution time in seconds: ' + str(execution_time))
+    execution_time = time.time() - start_time
+    print("Execution time in seconds: " + str(execution_time))
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
-

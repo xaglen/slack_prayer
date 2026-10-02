@@ -1,5 +1,6 @@
 settings.py
 credentials.json
+jp_cache.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -130,3 +131,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# run logs
+*.log.txt
