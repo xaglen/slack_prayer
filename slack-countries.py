@@ -18,7 +18,7 @@ from urllib import parse
 import country_data
 import requests
 import settings
-from blockkit import Image, Message, Section
+from blockkit import Context, Header, ImageEl, Message, Section, Text
 from bs4 import BeautifulSoup
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
@@ -176,22 +176,30 @@ def main():
     jp_link = f"<{jp_url}|Joshua Project>" if jp_url else "Joshua Project"
     ow_link = f"<{country_url}|Operation World>"
 
+    title = f"🌍 This week, pray for {country_name}"
     msg = Message()
-    msg.add_block(Section(f"This week intercede for *{country_name}* in your daily prayers. {wikipedia_url}"))
+    msg.add_block(Header(title[:150]))
 
-    facts_lines = [
-        line for line in (quick_facts, f"Progress level: {jp_scale_text}" if jp_scale_text else None) if line
-    ]
+    # Joshua Project stats on one line, progress level on the next, gauge as a small side image.
+    facts_lines = []
+    if quick_facts:
+        # '1405.7M' -> '1,405.7M'
+        facts_lines.append(re.sub(r"\d{4,}", lambda m: f"{int(m.group()):,}", quick_facts))
+    if jp_scale_text:
+        facts_lines.append(f"Progress level: *{jp_scale_text}* · {jp_link}")
+    elif facts_lines:
+        facts_lines[-1] += f" · {jp_link}"
     if facts_lines:
-        msg.add_block(Section(f"{jp_link} reports:\n>" + "\n>".join(facts_lines)))
-
-    if jp_scale_image_url:
-        msg.add_block(
-            Image(image_url=jp_scale_image_url, alt_text=f"Progress level: {jp_scale_text}", title=jp_scale_text)
-        )
+        facts = Section("\n".join(facts_lines))
+        if jp_scale_image_url:
+            facts = Section(
+                "\n".join(facts_lines),
+                accessory=ImageEl(image_url=jp_scale_image_url, alt_text=f"Progress level: {jp_scale_text}"),
+            )
+        msg.add_block(facts)
 
     if prayer_paragraph:
-        msg.add_block(Section(f"{ow_link} says:\n>{prayer_paragraph}"))
+        msg.add_block(Section(f"*From {ow_link}:*\n>{prayer_paragraph}"))
     else:
         msg.add_block(Section(f"You can learn more about its gospel needs at {ow_link}."))
 
@@ -202,8 +210,11 @@ def main():
             "missionaries and local workers."
         )
     )
+    msg.add_block(
+        Context(elements=[Text(text=f"More about {country_name} on <{wikipedia_url}|Wikipedia>", type="mrkdwn")])
+    )
     payload = msg.build()
-    fallback_text = f"This week intercede for {country_name} in your daily prayers. {wikipedia_url}"
+    fallback_text = title
 
     try:
         resp = client.chat_postMessage(
